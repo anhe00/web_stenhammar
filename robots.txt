@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://s873e24ccb11dbde3.sites.liveable.dev/sitemap.xml

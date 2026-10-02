@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stenhammar Bygg</title>
+<style>
+/* ─── PALETTE ─────────────────────────────────────────────────────────── */
+:root {
+  --lv-accent:    #c8722a;        /* amber-orange — the work lamp */
+  --lv-bg:        #201913;        /* deep concrete night */
+  --lv-fg:        #f0eae4;        /* raw linen */
+  --lv-radius:    2;              /* bare number — near-square, honest corners */
+  --lv-font:      'Georgia', 'Times New Roman', serif;
+  --lv-surface:   #2c241d;        /* slightly lifted plane */
+  --lv-sectionBg: #2c2219;        /* alternating deep */
+  --lv-muted:     #a99c91;        /* frost-grey text */
+  --lv-border:    #42352a;        /* timber shadow */
+  --lv-btnBg:     #c8722a;
+  --lv-btnFg:     #ffffff;
+  --lv-space:     32;             /* px */;
+  --lv-fontHead: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ─── RESET & BASE ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 52px;
+  font-size: 16px;
+}
+
+body {
+  background: var(--lv-bg);
+  color: var(--lv-fg);
+  font-family: var(--lv-font);
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ─── NAV ────────────────────────────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--lv-bg) 94%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--lv-border);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--lv-space) * 1px);
+  gap: calc(var(--lv-space) * 0.75px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar { display: none; }
+
+nav a {
+  font-family:var(--lv-fontHead);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lv-muted);
+  white-space: nowrap;
+  transition: color 0.2s;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+}
+nav a:hover {
+  color: var(--lv-fg);
+  border-bottom-color: var(--lv-accent);
+}
+
+nav .nav-mark {
+  margin-left: auto;
+  font-family:var(--lv-fontHead);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lv-accent);
+  white-space: nowrap;
+}
+
+/* ─── SHARED HELPERS ─────────────────────────────────────────────────── */
+.section-label {
+  font-family:var(--lv-fontHead);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lv-accent);
+  margin-bottom: 0.9rem;
+  display: block;
+}
+
+.rule {
+  width: 32px;
+  height: 1px;
+  background: var(--lv-accent);
+  margin: 1rem 0 1.4rem;
+}
+
+/* ─── 1. HERO ─────────────────────────────────────────────────────────── */
+section[data-section="hero"] {
+  position: relative;
+  height: 100svh;
+  min-height: 480px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: calc(var(--lv-space) * 2px) calc(var(--lv-space) * 1px);
+}
+
+section[data-section="hero"] img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  transform-origin: center center;
+  animation: hero-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes hero-drift {
+  from { transform: scale(1.00) translateY(0px); }
+  to   { transform: scale(1.04) translateY(-12px); }
+}
+
+/* cold morning wash */
+section[data-section="hero"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--lv-bg) 80%, transparent) 0%,
+      color-mix(in srgb, var(--lv-bg) 40%, transparent) 45%,
+      color-mix(in srgb, var(--lv-bg) 10%, transparent) 100%
+    );
+  pointer-events: none;
+}
+
+/* amber lamp-glow in bottom-left corner */
+section[data-section="hero"]::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 55%;
+  height: 55%;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse at 0% 100%,
+    color-mix(in srgb, var(--lv-accent) 18%, transparent) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.hero-body {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+}
+
+.hero-body h1 {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.06;
+  color: var(--lv-fg);
+  margin-bottom: 1rem;
+}
+
+.hero-body p {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: color-mix(in srgb, var(--lv-fg) 75%, transparent);
+  max-width: 480px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ─── 2. ABOUT ───────────────────────────────────────────────────────── */
+section[data-section="about"] {
+  background: var(--lv-surface);
+  padding: calc(var(--lv-space) * 3px) calc(var(--lv-space) * 1px);
+}
+
+.about-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: calc(var(--lv-space) * 2px);
+  align-items: center;
+}
+
+@media (min-width: 720px) {
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.about-text-col {}
+
+.about-text-col h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 1.2rem;
+  color: var(--lv-fg);
+}
+
+.about-text-col p {
+  font-size: 1rem;
+  color: color-mix(in srgb, var(--lv-fg) 80%, transparent);
+  max-width: 480px;
+  line-height: 1.75;
+}
+
+.about-img-col {
+  position: relative;
+}
+
+.about-img-col img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: calc(var(--lv-radius) * 1px);
+  display: block;
+}
+
+/* amber edge-light on image */
+.about-img-col::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--lv-radius) * 1px);
+  box-shadow: inset -4px 0 32px color-mix(in srgb, var(--lv-accent) 20%, transparent);
+  pointer-events: none;
+}
+
+/* small ruled stamp */
+.about-stamp {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--lv-border);
+  border-radius: calc(var(--lv-radius) * 1px);
+  font-family:var(--lv-fontHead);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lv-muted);
+}
+
+/* ─── 3. SERVICES ────────────────────────────────────────────────────── */
+section[data-section="services"] {
+  background: var(--lv-sectionBg);
+  padding: calc(var(--lv-space) * 3px) calc(var(--lv-space) * 1px);
+}
+
+.services-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.services-header {
+  margin-bottom: calc(var(--lv-space) * 2px);
+}
+
+.services-header h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--lv-fg);
+  margin-bottom: 0.5rem;
+}
+
+.services-header p {
+  color: var(--lv-muted);
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.services-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--lv-border);
+  border-radius: calc(var(--lv-radius) * 1px);
+  overflow: hidden;
+}
+
+@media (min-width: 600px) {
+  .services-cards { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 900px) {
+  .services-cards { grid-template-columns: repeat(4, 1fr); }
+}
+
+.service-card {
+  background: var(--lv-surface);
+  padding: calc(var(--lv-space) * 1.25px) calc(var(--lv-space) * 1px);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s;
+}
+
+.service-card:hover {
+  background: color-mix(in srgb, var(--lv-surface) 85%, var(--lv-accent));
+}
+
+/* vertical amber line left */
+.service-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 2px;
+  background: var(--lv-accent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.service-card:hover::before { opacity: 1; }
+
+.service-num {
+  font-family:var(--lv-fontHead);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--lv-accent);
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.service-card h3 {
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--lv-fg);
+  margin-bottom: 0.6rem;
+}
+
+.service-card p {
+  font-size: 0.88rem;
+  color: var(--lv-muted);
+  line-height: 1.65;
+}
+
+/* ─── 4. PROMISE ─────────────────────────────────────────────────────── */
+section[data-section="promise"] {
+  background: var(--lv-bg);
+  padding: calc(var(--lv-space) * 3px) calc(var(--lv-space) * 1px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* faint horizontal grain */
+section[data-section="promise"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    color-mix(in srgb, var(--lv-border) 18%, transparent) 3px,
+    color-mix(in srgb, var(--lv-border) 18%, transparent) 4px
+  );
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.promise-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: calc(var(--lv-space) * 2px);
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 720px) {
+  .promise-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  /* picture on left — text on right */
+  .promise-img-col { order: -1; }
+}
+
+.promise-img-col {
+  position: relative;
+}
+
+/* four-photograph mosaic */
+.promise-mosaic {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 200px 200px;
+  gap: 3px;
+  border-radius: calc(var(--lv-radius) * 1px);
+  overflow: hidden;
+}
+
+@media (min-width: 720px) {
+  .promise-mosaic {
+    grid-template-rows: 220px 220px;
+  }
+}
+
+.promise-mosaic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.85) brightness(0.92);
+  transition: filter 0.4s;
+}
+
+.promise-mosaic img:hover {
+  filter: saturate(1) brightness(1);
+}
+
+/* amber bar across the mosaic join */
+.promise-img-col::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 3px;
+  background: var(--lv-accent);
+  transform: translateY(-1px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.promise-text-col {}
+
+.promise-text-col h2 {
+  font-size: clamp(1.35rem, 3vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--lv-fg);
+  margin-bottom: 1.2rem;
+}
+
+.promise-text-col p {
+  font-size: 1rem;
+  color: color-mix(in srgb, var(--lv-fg) 78%, transparent);
+  line-height: 1.8;
+  max-width: 460px;
+}
+
+/* ─── 5. GALLERY ─────────────────────────────────────────────────────── */
+
+
+.gallery-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.gallery-header {
+  margin-bottom: calc(var(--lv-space) * 1.5px);
+}
+
+.gallery-header h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--lv-fg);
+  margin-bottom: 0.5rem;
+}
+
+.gallery-header p {
+  color: var(--lv-muted);
+  font-size: 0.92rem;
+  font-style: italic;
+  max-width: 520px;
+}
+
+/* the tool mount */
+
+
+
+
+
+
+
+
+/* first item spans two columns — anchor shot */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ─── 6. CONTACT ─────────────────────────────────────────────────────── */
+section[data-section="contact"] {
+  background: var(--lv-sectionBg);
+  padding: calc(var(--lv-space) * 3px) calc(var(--lv-space) * 1px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* amber edge glow top-right */
+section[data-section="contact"]::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 50%; height: 50%;
+  background: radial-gradient(
+    ellipse at 100% 0%,
+    color-mix(in srgb, var(--lv-accent) 10%, transparent) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.contact-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-inner h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--lv-fg);
+  margin-bottom: 0.5rem;
+}
+
+.contact-inner > p {
+  color: var(--lv-muted);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin-bottom: calc(var(--lv-space) * 1.5px);
+}
+
+/* form scaffold */
+[data-tool-form="contact_form"] {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--lv-space) * 0.75px);
+}
+
+[data-tool-part="fields"] {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--lv-space) * 0.75px);
+}
+
+[data-tool-part="field"] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+[data-tool-part="label"] {
+  font-family:var(--lv-fontHead);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lv-muted);
+}
+
+[data-tool-part="input"],
+[data-tool-form="contact_form"] textarea {
+  background: color-mix(in srgb, var(--lv-bg) 70%, transparent);
+  border: 1px solid var(--lv-border);
+  border-radius: calc(var(--lv-radius) * 1px);
+  color: var(--lv-fg);
+  font-family: var(--lv-font);
+  font-size: 0.95rem;
+  padding: 0.65rem 0.85rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+  min-height: 42px;
+}
+
+[data-tool-part="input"]:focus,
+[data-tool-form="contact_form"] textarea:focus {
+  border-color: var(--lv-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--lv-accent) 18%, transparent);
+}
+
+[data-tool-part="send"],
+[data-tool-part="confirm"] {
+  align-self: flex-start;
+  background: var(--lv-btnBg);
+  color: var(--lv-btnFg);
+  border: none;
+  border-radius: calc(var(--lv-radius) * 1px);
+  font-family:var(--lv-fontHead);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.6rem;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+[data-tool-part="send"]:hover,
+[data-tool-part="confirm"]:hover {
+  background: color-mix(in srgb, var(--lv-accent) 80%, var(--lv-fg));
+}
+
+[data-tool-part="code-step"] {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+[data-tool-part="code"] {
+  background: color-mix(in srgb, var(--lv-bg) 70%, transparent);
+  border: 1px solid var(--lv-border);
+  border-radius: calc(var(--lv-radius) * 1px);
+  color: var(--lv-fg);
+  font-family:var(--lv-fontHead);
+  font-size: 1.2rem;
+  letter-spacing: 0.3em;
+  padding: 0.6rem 1rem;
+  width: 160px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+[data-tool-part="code"]:focus {
+  border-color: var(--lv-accent);
+}
+
+[data-tool-part="done"] {
+  color: var(--lv-fg);
+  font-style: italic;
+  font-size: 0.95rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--lv-border);
+}
+
+[data-tool-part="note"] {
+  font-family:var(--lv-fontHead);
+  font-size: 0.68rem;
+  color: var(--lv-muted);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+[data-tool-part="error"] {
+  color: color-mix(in srgb, var(--lv-accent) 90%, #fff);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* ─── 7. LOCATION ────────────────────────────────────────────────────── */
+section[data-section="location"] {
+  background: var(--lv-bg);
+  padding: calc(var(--lv-space) * 3px) calc(var(--lv-space) * 1px);
+}
+
+.location-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.location-inner h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+  font-weight: 400;
+  color: var(--lv-fg);
+  margin-bottom: calc(var(--lv-space) * 1.5px);
+}
+
+.location-rows {
+  border-top: 1px solid var(--lv-border);
+}
+
+.location-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--lv-border);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.location-row-left {
+  font-family:var(--lv-fontHead);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lv-muted);
+  flex-shrink: 0;
+}
+
+.location-row-right {
+  color: var(--lv-fg);
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+/* ─── 8. FOOTER ──────────────────────────────────────────────────────── */
+section[data-section="footer"] {
+  background: var(--lv-surface);
+  border-top: 1px solid var(--lv-border);
+  padding: calc(var(--lv-space) * 2.5px) calc(var(--lv-space) * 1px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* amber horizon line */
+section[data-section="footer"]::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--lv-accent) 30%,
+    var(--lv-accent) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: calc(var(--lv-space) * 1.5px);
+}
+
+@media (min-width: 560px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+
+.footer-col h3 {
+  font-size: 0.7rem;
+  font-family:var(--lv-fontHead);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lv-accent);
+  margin-bottom: 0.8rem;
+}
+
+.footer-col p,
+.footer-col address {
+  color: var(--lv-muted);
+  font-style: normal;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.footer-base {
+  max-width: 1080px;
+  margin: calc(var(--lv-space) * 1.5px) auto 0;
+  padding-top: calc(var(--lv-space) * 0.75px);
+  border-top: 1px solid var(--lv-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.footer-base span {
+  font-family:var(--lv-fontHead);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--lv-muted) 60%, transparent);
+}
+</style>
+<style data-lv-style>
+:root [data-lv-el="c5f3e4"]{background:rgb(12 10 9 / 0.72);backdrop-filter:blur(14px) saturate(1.2);border-bottom:1px solid rgb(245 158 11 / 0.35)}
+:root [data-lv-el="cd30f5"]{color:#f59e0b;font-weight:800;letter-spacing:-0.02em}
+:root body a{text-underline-offset:6px}
+:root body a:hover{color:#f59e0b;text-decoration:underline 2px}
+:root body h2{font-family:'Playfair Display', serif;letter-spacing:-0.01em}
+</style><meta name="description" content="Stenhammar Bygg is a construction and renovation company at Verkstadsgatan 12, 721 30 Västerås, open Monday to Friday 07–16, with site visits by…"><meta name="robots" content="index,follow"><link rel="canonical" href="https://s873e24ccb11dbde3.sites.liveable.dev"><style data-lv-fonts>@font-face{font-family:'Playfair Display';font-style:normal;font-weight:300;font-display:swap;src:url(./fonts/playfair-display-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Playfair Display';font-style:normal;font-weight:300;font-display:swap;src:url(./fonts/playfair-display-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/playfair-display-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Playfair Display';font-style:normal;font-weight:500;font-display:swap;src:url(./fonts/playfair-display-latin-ext-500-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Playfair Display';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/playfair-display-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Playfair Display';font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/playfair-display-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Playfair Display';font-style:normal;font-weight:700;font-display:swap;src:url(./fonts/playfair-display-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Playfair Display';font-style:normal;font-weight:700;font-display:swap;src:url(./fonts/playfair-display-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Playfair Display';font-style:italic;font-weight:400;font-display:swap;src:url(./fonts/playfair-display-latin-400-italic.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Playfair Display';font-style:italic;font-weight:400;font-display:swap;src:url(./fonts/playfair-display-latin-ext-400-italic.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}</style><style data-liveable-tw>/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities;
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────────── -->
+<nav data-lv-el="c5f3e4">
+  <a href="#hero">Start</a>
+  <a href="#about">Om oss</a>
+  <a href="#services">Tjänster</a>
+  <a href="#promise">Löftet</a>
+  <a href="#gallery">Bilder</a>
+  <a href="#contact">Kontakt</a>
+  <a href="#location">Hitta oss</a>
+  <span class="nav-mark" data-lv-el="cd30f5">Stenhammar Bygg</span>
+<a data-lv-el="c85283" data-edit="_page-c85283" href="tel:+46000000000" aria-label="Ring Stenhammar Bygg">Ring oss</a></nav>
+
+<!-- ─── 1. HERO ──────────────────────────────────────────────────────── -->
+<section data-section="hero" id="hero">
+  <img
+    src="./images/hero-finished-house-0fc42d.webp"
+    alt="A finished Scandinavian timber house at golden hour, warm light in the large windows, a carpenter's work lamp still glowing on the porch, fresh larch cladding, "
+   data-lv-el="f64701">
+  <div class="hero-body" data-lv-el="d01d94">
+    <p data-lv-el="edc900" data-edit="hero-edc900">Byggare i Uppland sedan 1987</p><h1 data-edit="hero-heading" data-lv-el="d001b9">Stenhammar Bygg</h1>
+    <p data-edit="hero-sub" data-lv-el="ea6669">Ramen rest, formen klar — ett hem börjar bli till.</p>
+  <a data-lv-el="b708b2" data-edit="hero-b708b2" href="tel:+46000000000" aria-label="Ring Stenhammar Bygg">Ring oss</a></div>
+<style data-lv-style>
+[data-section="hero"]{--amber:#f59e0b}
+[data-section="hero"] [data-lv-el="f64701"]{filter:sepia(0.25) saturate(1.15) contrast(1.05)}
+[data-section="hero"] [data-lv-el="d01d94"]{background:rgb(15 12 10 / 0.35);backdrop-filter:blur(8px);border-left:3px solid var(--amber);padding:2rem 2.5rem;border-radius:0 18px 18px 0;animation:hero-rise 1s cubic-bezier(.2,.7,.2,1) both;max-width:min(92vw, 60rem)}
+[data-section="hero"] [data-lv-el="d001b9"]{font-size:clamp(3rem, 6.5vw, 6rem);font-weight:800;letter-spacing:-0.04em;line-height:0.9;background:linear-gradient(100deg, #fff 30%, var(--amber) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-section="hero"] [data-lv-el="d001b9"]::after{content:"";display:block;width:4.5rem;height:5px;margin-top:1.25rem;background:var(--amber)}
+[data-section="hero"] [data-lv-el="ea6669"]{font-size:1.25rem;font-style:normal;letter-spacing:0.02em;color:rgb(255 255 255 / 0.85)}
+[data-section="hero"] [data-lv-el="edc900"]{font-size:1.4rem;letter-spacing:0.02em;text-transform:none;color:var(--amber);margin-bottom:1rem;font-family:'Playfair Display', serif;font-style:italic}
+[data-section="hero"] [data-lv-el="b708b2"]{display:inline-block;margin-top:1.5rem;padding:0.8rem 1.6rem;background:var(--amber);color:#1c1917;font-weight:700;border-radius:999px;text-decoration:none;transition:transform .2s ease, box-shadow .2s ease}
+[data-section="hero"] [data-lv-el="b708b2"]:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgb(245 158 11 / .35)}
+[data-section="hero"] [data-lv-el="b708b2"]:focus-visible{outline:3px solid #fff}
+@media (max-width: 767px){
+[data-section="hero"] [data-lv-el="d001b9"]{font-size:2.75rem}
+}
+@media (prefers-reduced-motion: reduce){
+[data-section="hero"] [data-lv-el="d01d94"]{animation:none}
+}
+@keyframes hero-rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+</style></section>
+
+<!-- ─── 2. ABOUT ─────────────────────────────────────────────────────── -->
+<section data-section="about" id="about">
+  <div class="about-grid">
+    <div class="about-text-col">
+      <span class="section-label">Om oss</span>
+      <div class="rule"></div>
+      <h2 data-edit="about-heading">Människorna bakom väggarna</h2>
+      <p data-edit="about-text">Erik Stenhammar startade Stenhammar Bygg 2009 efter tjugo år hos de stora byggbolagen — för att han ville vara den som slutför det han påbörjar och den som svarar i telefon när en kund har en fråga om sitt eget hus. Teamet är sex snickare, varav en certifierad takläggare, tillsammans med samme elektriker och rörmokare som vi arbetat sida vid sida med i femton år.</p>
+      <span class="about-stamp">Grundat 2009 · Västerås</span>
+    </div>
+    <div class="about-img-col">
+      <img
+        src="./images/generated-image-october-01-2026-11-59am-bbebe2.jpg"
+        alt="Erik Stenhammar och teamet samlade på en arbetsplats en tidig morgon — arbetskläder, kaffe i handen, stommen bakom dem i det låga ljuset"
+      >
+    </div>
+  </div>
+</section>
+
+<!-- ─── 3. SERVICES ──────────────────────────────────────────────────── -->
+<section data-section="services" id="services">
+  <div class="services-inner">
+    <div class="services-header">
+      <span class="section-label">Vad vi gör</span>
+      <h2 data-edit="services-heading">Det vi bygger</h2>
+      <p data-edit="services-sub">Allt för familjer i och kring Västerås.</p>
+    </div>
+    <div class="services-cards">
+      <div class="service-card">
+        <span class="service-num">01</span>
+        <h3 data-edit="services-cards-1-title">Tillbyggnader</h3>
+        <p data-edit="services-cards-1-text">Vi utökar det ni redan har — noggrant, snyggt och utan onödigt liv i huset.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">02</span>
+        <h3 data-edit="services-cards-2-title">Tak</h3>
+        <p data-edit="services-cards-2-text">Från stommens bärning till yttertakets sista skiva, med en certifierad takläggare i laget.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">03</span>
+        <h3 data-edit="services-cards-3-title">Kök & badrum</h3>
+        <p data-edit="services-cards-3-text">Ner till regeln, upp igen — rätt gjort från grunden med samma hantverkare genom hela jobbet.</p>
+      </div>
+      <div class="service-card">
+        <span class="service-num">04</span>
+        <h3 data-edit="services-cards-4-title">Fritidshus</h3>
+        <p data-edit="services-cards-4-text">Sommarstugor vid Mälaren byggda från grunden, i det lugna och med ögat på varje detalj.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 4. PROMISE ───────────────────────────────────────────────────── -->
+<section data-section="promise" id="promise">
+  <div class="promise-grid">
+    <div class="promise-img-col">
+      <div class="promise-mosaic">
+        <img
+          src="./img/3f97c06d6416460f.png"
+          alt="Grundgrävning på en bostadstomt i tidigt morgonljus — lera och kalksten, spaden nyss lyft"
+        >
+        <img
+          src="./img/9af3587692a09dc5.png"
+          alt="Trästomme rest mot en blå vinterhimmel — reglar och bjälkar tydliga mot ljuset"
+        >
+        <img
+          src="./img/2d105714aa1b6593.png"
+          alt="Isolering lagd i väggreglar — gul mineralull tät och jämn, ännu öppet inför att väggskivorna sluter sig"
+        >
+        <img
+          src="./img/ebaba4e2a980c2de.png"
+          alt="Färdig innervägg i ett nytt rum — ren yta, jämnt spacklad, klar att målas"
+        >
+      </div>
+    </div>
+    <div class="promise-text-col">
+      <span class="section-label">Vårt löfte</span>
+      <div class="rule"></div>
+      <h2 data-edit="promise-heading">Du vet alltid vad som finns inuti väggarna</h2>
+      <p data-edit="promise-text">Hos oss vet du alltid vem som är på din tomt dagen efter. Det är inte en slump — det är hur vi arbetar. Och vid varje skede, när grunden är grävd, när stommen står, när isoleringen är lagd innan väggarna sluter sig, fotograferar vi arbetet. Bilderna lämnar vi över med nycklarna. Ditt hus får en egen journal över allt som är gömt innanför ytskikten. Inte för att vi måste. För att det är rätt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 5. GALLERY ───────────────────────────────────────────────────── -->
+<section data-section="gallery" id="gallery"><style>
+[data-section="gallery"] {
+  background: var(--lv-surface);
+  padding: calc(var(--lv-space) * 3px) calc(var(--lv-space) * 1px);
+}
+[data-tool-part="items"] {
+  display: flex;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+}
+[data-tool-part="item"] {
+  margin: -14px;
+}
+[data-tool-part="image"] {
+  width: var(--lv-photo, 200px);
+  height: var(--lv-photo, 200px);
+  max-width: none;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--lv-border);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+  filter: saturate(0.95) contrast(1.05);
+}
+[data-tool-part="caption"] {
+  position: absolute;
+  opacity: 0;
+  font-family: var(--lv-fontHead);
+  font-size: 0.62rem;
+  color: var(--lv-fg);
+  background: linear-gradient(to top, color-mix(in srgb, var(--lv-bg) 80%, transparent), transparent);
+}
+[data-tool-part="item"]:nth-child(1) {
+  --lv-photo: 280px;
+}
+[data-tool-part="item"]:nth-child(odd) {
+  z-index: 2;
+  transform: rotate(-4deg);
+}
+[data-tool-part="item"]:nth-child(even) {
+  z-index: 3;
+  transform: rotate(3deg);
+}
+[data-tool-part="item"]:nth-child(3) {
+  transform: rotate(7deg);
+}
+[data-tool-part="item"]:nth-child(2) [data-tool-part="image"] {
+  border-radius: 50%;
+  border: 4px solid #f59e0b;
+}
+[data-tool-part="item"]:nth-child(3n+1) [data-tool-part="image"] {
+  filter: grayscale(1);
+}
+[data-section="gallery"] [data-tool-part="item"] [data-tool-part="image"] {
+  transition: transform .4s ease, filter .4s ease;
+}
+[data-section="gallery"] [data-tool-part="item"]:hover [data-tool-part="image"] {
+  filter: none;
+  transform: scale(1.04);
+}
+[data-tool-part="item"] {
+  position: relative;
+}
+[data-tool-part="item"] {
+  overflow: hidden;
+}
+[data-tool-part="item"] {
+  cursor: pointer;
+}
+[data-tool-part="image"] {
+  display: block;
+}
+[data-tool-part="image"] {
+  transition: transform 0.5s ease, filter 0.3s;
+}
+[data-tool-part="caption"] {
+  bottom: 0;
+}
+[data-tool-part="caption"] {
+  left: 0;
+}
+[data-tool-part="caption"] {
+  right: 0;
+}
+[data-tool-part="caption"] {
+  padding: 0.5rem 0.75rem;
+}
+[data-tool-part="caption"] {
+  letter-spacing: 0.1em;
+}
+[data-tool-part="caption"] {
+  text-transform: uppercase;
+}
+[data-tool-part="caption"] {
+  transform: translateY(4px);
+}
+[data-tool-part="caption"] {
+  transition: opacity 0.3s, transform 0.3s;
+}
+[data-tool-part="empty"] {
+  grid-column: 1 / -1;
+}
+[data-tool-part="empty"] {
+  padding: calc(var(--lv-space) * 2px);
+}
+[data-tool-part="empty"] {
+  text-align: center;
+}
+[data-tool-part="empty"] {
+  color: var(--lv-muted);
+}
+[data-tool-part="empty"] {
+  font-style: italic;
+}
+[data-tool-part="empty"] {
+  font-size: 0.9rem;
+}
+[data-tool-part="empty"] {
+  border: 1px dashed var(--lv-border);
+}
+[data-tool-part="empty"] {
+  border-radius: calc(var(--lv-radius) * 1px);
+}
+[data-tool-part="item"]::after {
+  content: ''; position: absolute; inset: 0; background: color-mix(in srgb, var(--lv-accent) 0%, transparent); transition: background 0.3s; pointer-events: none;
+}
+[data-tool-part="item"]:hover::after {
+  background: color-mix(in srgb, var(--lv-accent) 14%, transparent);
+}
+[data-tool-part="item"]:hover [data-tool-part="image"] {
+  transform: scale(1.04); filter: saturate(1) brightness(1);
+}
+[data-tool-part="item"]:hover [data-tool-part="caption"] {
+  opacity: 1; transform: translateY(0);
+}
+
+@media (min-width: 600px) {
+[data-tool-part="items"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+}
+
+@media (min-width: 900px) {
+[data-tool-part="items"] {
+  grid-template-columns: repeat(4, 1fr);
+}
+}
+
+@media (max-width: 767px) {
+[data-tool-part="item"] {
+  margin: -8px;
+}
+[data-tool-part="image"] {
+  width: var(--lv-photo, 130px);
+  height: var(--lv-photo, 130px);
+  max-width: none;
+}
+[data-tool-part="item"]:nth-child(1) {
+  --lv-photo: 180px;
+}
+}
+</style>
+
+  <div class="gallery-inner">
+    <div class="gallery-header">
+      <span class="section-label">Arbetsplatsen</span>
+      <h2 data-edit="gallery-heading">Från arbetsplatsen</h2>
+      <p data-edit="gallery-sub">Bilder från riktiga jobb — råa material, ärliga skeden, det hantverk som döljs bakom putsen.</p>
+    </div>
+
+    <div data-tool-form="gallery">
+      
+      <p data-tool-part="empty" hidden="">Snart: bilder från våra bygg - från grund till nyckel.</p>
+    </div>
+
+  </div>
+  <div data-tool="gallery"><!-- Photo gallery - a Liveable tool, not included in this export --><p data-exported-tool="gallery" style="margin:0;padding:1.25rem;border:1px dashed currentColor;opacity:.7;text-align:center;font:inherit">Photo gallery - a Liveable tool, not included in this export</p></div>
+</section>
+
+<!-- ─── 6. CONTACT ───────────────────────────────────────────────────── -->
+<section data-section="contact" id="contact">
+  <div class="contact-inner">
+    <span class="section-label">Kontakt</span>
+    <h2 data-edit="contact-heading">Ta kontakt</h2>
+    <p data-edit="contact-sub">Berätta om ert projekt. Erik svarar.</p>
+
+    <div data-tool-form="contact_form">
+      <div data-tool-part="fields">
+        <div data-tool-part="field">
+          <label data-tool-part="label"></label>
+          <input data-tool-part="input">
+        </div>
+      </div>
+      <button data-tool-part="send" type="button" data-edit="contact-submit">Skicka</button>
+      <div data-tool-part="code-step" hidden>
+        <input data-tool-part="code" inputmode="numeric" placeholder="6-siffrig kod">
+        <button data-tool-part="confirm" type="button">Bekräfta</button>
+      </div>
+      <p data-tool-part="done" hidden>Tack — ditt meddelande är skickat. Erik återkommer inom kort.</p>
+      <p data-tool-part="note">Vi skickar en kod till din e-post för att bekräfta meddelandet.</p>
+      <p data-tool-part="error" hidden></p>
+      <div data-tool="contact_form"><!-- Contact form - a Liveable tool, not included in this export --><p data-exported-tool="contact_form" style="margin:0;padding:1.25rem;border:1px dashed currentColor;opacity:.7;text-align:center;font:inherit">Contact form - a Liveable tool, not included in this export</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 7. LOCATION ──────────────────────────────────────────────────── -->
+<section data-section="location" id="location">
+  <div class="location-inner">
+    <span class="section-label">Var vi finns</span>
+    <h2 data-edit="location-heading">Hitta oss</h2>
+    <div class="location-rows">
+      <div class="location-row">
+        <span class="location-row-left" data-edit="location-rows-1-left">Adress</span>
+        <span class="location-row-right" data-edit="location-rows-1-right">Verkstadsgatan 12, 721 30 Västerås</span>
+      </div>
+      <div class="location-row">
+        <span class="location-row-left" data-edit="location-rows-2-left">Måndag – fredag</span>
+        <span class="location-row-right" data-edit="location-rows-2-right">07.00 – 16.00</span>
+      </div>
+      <div class="location-row">
+        <span class="location-row-left" data-edit="location-rows-3-left">Platsbesök</span>
+        <span class="location-row-right" data-edit="location-rows-3-right">Enligt överenskommelse</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 8. FOOTER ────────────────────────────────────────────────────── -->
+<section data-section="footer" id="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h3 data-edit="footer-columns-1-title">Stenhammar Bygg</h3>
+      <address>
+        Verkstadsgatan 12<br>
+        721 30 Västerås
+      </address>
+    </div>
+    <div class="footer-col">
+      <h3 data-edit="footer-columns-2-title">Öppettider</h3>
+      <p>Måndag – fredag: 07.00 – 16.00<br>Platsbesök enligt överenskommelse</p>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span data-edit="footer-copy">© 2009–2025 Stenhammar Bygg AB</span>
+    <span data-edit="footer-place">Västerås, Sverige</span>
+  </div>
+</section>
+
+</body>
+</html>
